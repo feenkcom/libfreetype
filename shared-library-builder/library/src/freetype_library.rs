@@ -46,6 +46,10 @@ impl Library for FreetypeLibrary {
         self.0.location()
     }
 
+    fn release_location(&self) -> &LibraryLocation {
+        self.0.release_location()
+    }
+
     fn name(&self) -> &str {
         self.0.name()
     }
