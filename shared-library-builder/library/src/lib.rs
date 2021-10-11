@@ -4,6 +4,7 @@ mod png_library;
 mod zlib_library;
 
 use shared_library_builder::{GitLocation, LibraryLocation};
+use crate::bzip2_library::BZip2Library;
 use crate::freetype_library::FreetypeLibrary;
 use crate::png_library::PngLibrary;
 use crate::zlib_library::ZLibLibrary;
@@ -20,4 +21,8 @@ pub fn libpng() -> PngLibrary {
 
 pub fn libzlib() -> ZLibLibrary {
     ZLibLibrary::default()
+}
+
+pub fn libbzip2() -> BZip2Library {
+    BZip2Library::default()
 }
