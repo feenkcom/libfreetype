@@ -1,24 +1,18 @@
 use shared_library_builder::{
-    CMakeLibrary, CompiledLibraryName, GitLocation, Library, LibraryCompilationContext,
-    LibraryDependencies, LibraryLocation, LibraryOptions,
+    CMakeLibrary, CompiledLibraryName, GitLocation, Library, LibraryLocation,
 };
-use std::error::Error;
-use std::path::PathBuf;
 
 #[derive(Debug, Clone)]
 pub struct BZip2Library(CMakeLibrary);
 
 impl BZip2Library {
-    pub fn default() -> Self {
-        Self::commit("bf905ea2251191ff9911ae7ec0cfc35d41f9f7f6")
-    }
-
-    pub fn commit(commit: impl Into<String>) -> Self {
+    pub fn latest() -> Self {
         Self(
             CMakeLibrary::new(
                 "bzip2",
                 LibraryLocation::Git(
-                    GitLocation::gitlab("federicomenaquintero", "bzip2").commit(commit),
+                    GitLocation::gitlab("federicomenaquintero", "bzip2")
+                        .commit("bf905ea2251191ff9911ae7ec0cfc35d41f9f7f6"),
                 ),
             )
             .compiled_name(CompiledLibraryName::Matching("bzip2".to_string()))
@@ -28,67 +22,18 @@ impl BZip2Library {
             .define_static("ENABLE_SHARED_LIB", "OFF")
             .define_shared("ENABLE_STATIC_LIB", "OFF")
             .define_shared("ENABLE_SHARED_LIB", "ON")
-            .define_shared("BUILD_SHARED_LIBS", "ON"),
+            .define_shared("BUILD_SHARED_LIBS", "ON")
+            .into(),
         )
     }
-}
 
-impl Library for BZip2Library {
-    fn location(&self) -> &LibraryLocation {
-        self.0.location()
-    }
-
-    fn name(&self) -> &str {
-        self.0.name()
-    }
-
-    fn dependencies(&self) -> Option<&LibraryDependencies> {
-        self.0.dependencies()
-    }
-
-    fn options(&self) -> &LibraryOptions {
-        self.0.options()
-    }
-
-    fn options_mut(&mut self) -> &mut LibraryOptions {
-        self.0.options_mut()
-    }
-
-    fn force_compile(&self, context: &LibraryCompilationContext) -> Result<(), Box<dyn Error>> {
-        self.0.force_compile(context)
-    }
-
-    fn compiled_library_directories(&self, context: &LibraryCompilationContext) -> Vec<PathBuf> {
-        self.0.compiled_library_directories(context)
-    }
-
-    fn ensure_requirements(&self, context: &LibraryCompilationContext) {
-        self.0.ensure_requirements(context)
-    }
-
-    fn native_library_prefix(&self, context: &LibraryCompilationContext) -> PathBuf {
-        self.0.native_library_prefix(context)
-    }
-
-    fn native_library_include_headers(&self, context: &LibraryCompilationContext) -> Vec<PathBuf> {
-        self.0.native_library_include_headers(context)
-    }
-
-    fn native_library_linker_libraries(&self, context: &LibraryCompilationContext) -> Vec<PathBuf> {
-        self.0.native_library_linker_libraries(context)
-    }
-
-    fn pkg_config_directory(&self, context: &LibraryCompilationContext) -> Option<PathBuf> {
-        self.0.pkg_config_directory(context)
-    }
-
-    fn clone_library(&self) -> Box<dyn Library> {
-        Box::new(Clone::clone(self))
+    pub fn into_cmake_library(self) -> CMakeLibrary {
+        self.0
     }
 }
 
 impl From<BZip2Library> for Box<dyn Library> {
     fn from(library: BZip2Library) -> Self {
-        Box::new(library)
+        library.0.into()
     }
 }

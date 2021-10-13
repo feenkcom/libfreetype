@@ -8,5 +8,4 @@ path = "src/lib.rs"
 
 [dependencies]
 shared-library-builder = { git = "https://github.com/feenkcom/shared-library-builder-rs", features = ["git-location", "cmake-library"] }
-which = "4.2"
-file-matcher = "0.6"
+file-matcher = "0.7"
