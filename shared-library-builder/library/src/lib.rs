@@ -18,6 +18,11 @@ pub fn libfreetype(binary_version: Option<impl Into<String>>) -> CMakeLibrary {
         }))
 }
 
+pub fn latest_libfreetype() -> CMakeLibrary {
+    let version: Option<String> = None;
+    libfreetype(version)
+}
+
 pub fn libpng() -> CMakeLibrary {
     PngLibrary::v1_6_37().into_cmake_library()
 }
